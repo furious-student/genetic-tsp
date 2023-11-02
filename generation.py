@@ -31,7 +31,7 @@ class Generation:
         eval_organisms = dict(sorted(eval_organisms.items(), key=lambda organism: organism[1]))
         if assign_to_self:
             self.__eval_organisms = eval_organisms
-        print_dict(eval_organisms)
+        # print_dict(eval_organisms)
         return eval_organisms
 
     def pick_elite(self, elite_percentage: float = 0.2) -> List[Optional["Organism"]]:
@@ -44,8 +44,8 @@ class Generation:
             if elite_size > 0:
                 elite.append(organism)
                 elite_size -= 1
-        for e in elite:
-            print(e)
+        # for e in elite:
+        #     print(e)
         return elite
 
     def select_parents(self, parents_percentage: float = 0.5, tournament_size_percentage: float = 0.33) -> None:
@@ -60,12 +60,11 @@ class Generation:
         if parents_size % 2 == 1:
             parents_size += 1
         tournament_size = round(len(self.__organisms) * tournament_size_percentage)
-        print(tournament_size)
         parents = set()
         while len(parents) < parents_size:
             parents.add(self.__tournament(tournament_size))
-        for p in parents:
-            print(p)
+        # for p in parents:
+        #     print(p)
         self.__parents = list(parents)
 
     def __tournament(self, t_size: int) -> Optional["Organism"]:
@@ -79,31 +78,31 @@ class Generation:
             parent1 = self.__parents[i]
             parent2 = self.__parents[2]
             children += (parent1.reproduce(parent2, mutate_prob=mutate_prob, mutate_form=mutate_form))
-        for ch in children:
-            print(ch)
+        # for ch in children:
+        #     print(ch)
         return children
 
-    def create_next_gen(self, parents_percentage: float = 0.5, elite_percentage: float = 0.2, mutate_prob: float = 0.05,
+    def create_next_gen(self, parents_ratio: float = 0.5, elite_percentage: float = 0.2, mutate_prob: float = 0.05,
                         mutate_form: Literal["random", "both", "swap", "inverse"] = "random", next_gen_size: int = 30):
         self.evaluate()
-        self.select_parents(parents_percentage=parents_percentage, tournament_size_percentage=0.33)
+        self.select_parents(parents_percentage=parents_ratio, tournament_size_percentage=0.33)
         children = self.reproduce(mutate_prob=mutate_prob, mutate_form=mutate_form)
         all_organisms = copy.deepcopy(self.__organisms) + children
 
         all_eval = self.evaluate(organisms=all_organisms, assign_to_self=False)
         next_gen_organisms = list()
 
-        print("==========> ALL ORGANISMS")
-        for o in all_organisms:
-            print(o)
+        # print("==========> ALL ORGANISMS")
+        # for o in all_organisms:
+        #     print(o)
 
         for organism, fitness in all_eval.items():
             if next_gen_size > 0:
                 next_gen_organisms.append(organism)
                 next_gen_size -= 1
 
-        print("==========> NEW GEN")
-        for o in next_gen_organisms:
-            print(o)
+        # print("==========> NEW GEN")
+        # for o in next_gen_organisms:
+        #     print(o)
 
         return Generation(next_gen_organisms)

@@ -1,5 +1,6 @@
 import math
 import random
+from time import time_ns
 from typing import List, Optional, Literal
 from city import City
 
@@ -16,40 +17,56 @@ class Organism:
             string += str(gene) + "~"
         return string[:-1] + "~}"
 
+    def __eq__(self, other):
+        if not isinstance(other, Organism):
+
+            return False
+        self_chromo = self.__chromosome
+        other_chromo = other.get_chromosome()
+        if len(self_chromo) != len(other_chromo):
+            return False
+        for i in range(0, len(self_chromo)):
+            if self_chromo[i] != other_chromo[i]:
+                return False
+        return True
+
+    def __hash__(self):
+        return hash(tuple(self.__chromosome))
+
     def get_chromosome(self) -> List[Optional["City"]]:
         return self.__chromosome
 
     def mutate(self, form: Literal["random", "both", "swap", "inverse"] = "random", probability: float = 0.05) -> None:
         if probability < 0 or probability > 1:
             raise ValueError(f"Argument probability can only be from interval <0, 1> but is {probability}")
-        random.seed(self)
+        random.seed(str(self.__chromosome)+str(time_ns()))
         if not random.random() <= probability:
             return
         if form == "swap":
             self.__mutate_swap()
-            print("  > swap")
+            # print("  > swap")
         elif form == "inverse":
             self.__mutate_inverse()
-            print("  > inverse")
+            # print("  > inverse")
         elif form == "both":
             self.__mutate_swap()
             self.__mutate_inverse()
-            print("  > swap")
-            print("  > inverse")
+            # print("  > swap")
+            # print("  > inverse")
         elif form == "random":
-            random.seed(tuple(self.__chromosome * 2))
+            random.seed(str(self.__chromosome)+str(time_ns()))
             coin_flip = random.randint(0, 1)
             if coin_flip == 0:
                 self.__mutate_swap()
-                print("  > random: swap")
+                # print("  > random: swap")
             else:
                 self.__mutate_inverse()
-                print("  > random: inverse")
+                # print("  > random: inverse")
         else:
             raise ValueError(f"Argument \"form\" has invalid value: \"{form}\"")
 
     def __mutate_swap(self) -> None:
-        random.seed(tuple(self.__chromosome))
+        random.seed(str(self.__chromosome)+str(time_ns()))
         point = random.randrange(0, len(self.__chromosome))
         next_point = (point + 1) % len(self.__chromosome)
 
@@ -58,7 +75,7 @@ class Organism:
         self.__chromosome[next_point] = temp
 
     def __mutate_inverse(self) -> None:
-        random.seed(tuple(self.__chromosome))
+        random.seed(str(self.__chromosome)+str(time_ns()))
         inverse_len = random.randint(2, math.floor(len(self.__chromosome) / 2))  # The length of inversed string
         start_point = random.randint(0, len(self.__chromosome) - 1)
         end_point = (start_point + inverse_len - 1) % len(self.__chromosome)
@@ -87,7 +104,7 @@ class Organism:
         self_chromo = self.__chromosome
         other_chromo = other.get_chromosome()
 
-        random.seed(tuple(self.__chromosome))
+        random.seed(str(self.__chromosome)+str(time_ns()))
         path_len = random.randint(2, math.floor(len(self.__chromosome) * 0.6))  # The length of inversed string
         start_point = random.randint(0, math.floor(len(self.__chromosome) * 0.4))
 
