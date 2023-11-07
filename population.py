@@ -27,7 +27,8 @@ class Population:
                gen_size: int = 30, mut_inc_threshold: int = 3):
         init_mutate_prob = mutate_prob
         for i in range(generations):
-            print("gen", i, "avg_fitness:", self.__current_gen.get_avg_fitness())
+            print("gen", i, "| avg_fitness:", self.__current_gen.get_avg_fitness(),
+                  "| mutation probability:", mutate_prob)
             self.__all_gen_fitness.append(self.__current_gen.get_avg_fitness())
             self.__current_gen = self.__current_gen.create_next_gen(parents_ratio=parents_ratio,
                                                                     elite_percentage=elite_percentage,

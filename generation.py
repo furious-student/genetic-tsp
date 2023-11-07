@@ -21,7 +21,7 @@ class Generation:
         fitness = 0
         for organism in self.__organisms:
             fitness += organism.calc_fitness()
-        return fitness / len(self.__organisms)
+        return round(fitness / len(self.__organisms))
 
     def evaluate(self, organisms: List[Optional["Organism"]] = None, assign_to_self=True) -> \
             Dict[Optional["Organism"], float]:
