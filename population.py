@@ -23,6 +23,7 @@ class Population:
         return len(set(gen_fitness_evolution[-threshold:])) == 1
 
     def evolve(self, generations: int = 10, parents_ratio: float = 0.5, elite_percentage: float = 0.2,
+               select_method: Literal["tournament", "roulette"] = "tournament",
                mutate_prob: float = 0.05, mutate_form: Literal["random", "both", "swap", "inverse"] = "random",
                gen_size: int = 30, mut_inc_threshold: int = 3):
         init_mutate_prob = mutate_prob
@@ -31,6 +32,7 @@ class Population:
                   "| mutation probability:", mutate_prob)
             self.__all_gen_fitness.append(self.__current_gen.get_avg_fitness())
             self.__current_gen = self.__current_gen.create_next_gen(parents_ratio=parents_ratio,
+                                                                    select_method=select_method,
                                                                     elite_percentage=elite_percentage,
                                                                     mutate_prob=mutate_prob,
                                                                     mutate_form=mutate_form,

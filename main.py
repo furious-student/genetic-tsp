@@ -29,6 +29,7 @@ def main():
     population = Population(Generation(organisms))
     population.evolve(generations=100,
                       parents_ratio=0.5,
+                      select_method="roulette",
                       elite_percentage=0.2,
                       mutate_prob=0.1,
                       mutate_form="random",
