@@ -20,24 +20,26 @@ def main():
         cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
 
     # create first generation of organisms
-    for i in range(40):
+    for i in range(100):
         random.seed(str(i) + time.time().hex())
         shuffled_cities = cities.copy()
         random.shuffle(shuffled_cities)
         organisms.append(Organism(chromosome=shuffled_cities))
 
     population = Population(Generation(organisms))
-    population.evolve(generations=100,
-                      parents_ratio=0.5,
-                      select_method="roulette",
-                      elite_percentage=0.2,
-                      mutate_prob=0.1,
-                      mutate_form="random",
-                      gen_size=40,
-                      mut_inc_threshold=3)
+    optimal_solution = population.evolve(generations=1000,
+                                         parents_ratio=0.5,
+                                         select_method="roulette",
+                                         elite_percentage=0.2,
+                                         mutate_prob=0.1,
+                                         mutate_form="random",
+                                         gen_size=100,
+                                         mut_inc_threshold=3)
     print("Generations fitness:", population.get_all_gen_fitness())
+    print("Generations worst fitness:", population.get_all_gen_worst_fitness())
+    print("Generations best fitness:", population.get_all_gen_best_fitness())
+    print("Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
 
 
 if __name__ == '__main__':
     main()
-

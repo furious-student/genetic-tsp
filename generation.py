@@ -2,7 +2,6 @@ import copy
 import random
 from typing import List, Optional, Dict, Literal
 from time import time_ns
-from utils import print_dict
 
 from organism import Organism
 
@@ -35,7 +34,6 @@ class Generation:
         eval_organisms = dict(sorted(eval_organisms.items(), key=lambda organism: organism[1]))
         if assign_to_self:
             self.__eval_organisms = eval_organisms
-        # print_dict(eval_organisms)
         return eval_organisms
 
     def pick_elite(self, elite_percentage: float = 0.2) -> List[Optional["Organism"]]:
@@ -48,8 +46,6 @@ class Generation:
             if elite_size > 0:
                 elite.append(organism)
                 elite_size -= 1
-        # for e in elite:
-        #     print(e)
         return elite
 
     def select_parents(self, parents_percentage: float = 0.5, method: Literal["tournament", "roulette"] = "tournament",
@@ -75,8 +71,6 @@ class Generation:
         parents = set()
         while len(parents) < parents_size:
             parents.add(self.__tournament(tournament_size))
-        # for p in parents:
-        #     print(p)
         self.__parents = list(parents)
 
     def __tournament(self, t_size: int) -> Optional["Organism"]:
@@ -102,8 +96,6 @@ class Generation:
                 if current_fitness_sum >= roulette_point:
                     parents.add(organism)
                 current_fitness_sum += 1/organism.calc_fitness()
-        # for p in parents:
-        #     print(p)
         self.__parents = list(parents)
 
     def reproduce(self, mutate_prob: float = 0.05,
@@ -113,8 +105,6 @@ class Generation:
             parent1 = self.__parents[i]
             parent2 = self.__parents[2]
             children += (parent1.reproduce(parent2, mutate_prob=mutate_prob, mutate_form=mutate_form))
-        # for ch in children:
-        #     print(ch)
         return children
 
     def create_next_gen(self, parents_ratio: float = 0.5, elite_percentage: float = 0.2, mutate_prob: float = 0.05,
@@ -128,17 +118,9 @@ class Generation:
         all_eval = self.evaluate(organisms=all_organisms, assign_to_self=False)
         next_gen_organisms = list()
 
-        # print("==========> ALL ORGANISMS")
-        # for o in all_organisms:
-        #     print(o)
-
         for organism, fitness in all_eval.items():
             if next_gen_size > 0:
                 next_gen_organisms.append(organism)
                 next_gen_size -= 1
-
-        # print("==========> NEW GEN")
-        # for o in next_gen_organisms:
-        #     print(o)
 
         return Generation(next_gen_organisms)

@@ -44,24 +44,18 @@ class Organism:
             return
         if form == "swap":
             self.__mutate_swap()
-            # print("  > swap")
         elif form == "inverse":
             self.__mutate_inverse()
-            # print("  > inverse")
         elif form == "both":
             self.__mutate_swap()
             self.__mutate_inverse()
-            # print("  > swap")
-            # print("  > inverse")
         elif form == "random":
             random.seed(str(self.__chromosome)+str(time_ns()))
             coin_flip = random.randint(0, 1)
             if coin_flip == 0:
                 self.__mutate_swap()
-                # print("  > random: swap")
             else:
                 self.__mutate_inverse()
-                # print("  > random: inverse")
         else:
             raise ValueError(f"Argument \"form\" has invalid value: \"{form}\"")
 
