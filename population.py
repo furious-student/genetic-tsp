@@ -1,5 +1,9 @@
+import math
+import random
+import time
 from typing import List, Optional, Literal
 
+from city import City
 from generation import Generation
 from organism import Organism
 
@@ -10,7 +14,7 @@ class Population:
     __all_gen_best_fitness: List[float]
     __current_gen: Optional["Generation"]
 
-    def __init__(self, init_gen: Optional["Generation"]):
+    def __init__(self, init_gen: Optional["Generation"] = None):
         self.__all_gen_fitness = list()
         self.__all_gen_worst_fitness = list()
         self.__all_gen_best_fitness = list()
@@ -24,6 +28,29 @@ class Population:
 
     def get_all_gen_best_fitness(self) -> List[float]:
         return self.__all_gen_best_fitness
+
+    def init_first_gen(self, map_size : int = 200, chromosome_len: int = 20, gen_size: int = 20):
+        if chromosome_len < 3:
+            raise ValueError(f"Argument 'chromosome_len' must be an integer greater than 3 but is {chromosome_len}")
+
+        organisms = list()
+        cities = list()
+
+        # create cities on map
+        for i in range(chromosome_len):
+            random.seed(str(i) + time.time().hex())
+            rand_x = random.randint(0, map_size+1)
+            rand_y = random.randint(0, map_size+1)
+            cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
+
+        # create first generation of organisms
+        for i in range(gen_size):
+            random.seed(str(i) + time.time().hex())
+            shuffled_cities = cities.copy()
+            random.shuffle(shuffled_cities)
+            organisms.append(Organism(chromosome=shuffled_cities))
+
+        self.__current_gen = Generation(organisms)
 
     def is_stagnating(self, threshold: int = 3) -> bool:
         if threshold < 2:

@@ -9,31 +9,17 @@ from population import Population
 
 
 def main():
-    organisms = list()
-    cities = list()
-
-    # create cities on map
-    for i in range(10):
-        random.seed(str(i) + time.time().hex())
-        rand_x = random.randint(0, 200)
-        rand_y = random.randint(0, 200)
-        cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
-
-    # create first generation of organisms
-    for i in range(100):
-        random.seed(str(i) + time.time().hex())
-        shuffled_cities = cities.copy()
-        random.shuffle(shuffled_cities)
-        organisms.append(Organism(chromosome=shuffled_cities))
-
-    population = Population(Generation(organisms))
+    population = Population()
+    population.init_first_gen(map_size=200,
+                              chromosome_len=10,
+                              gen_size=30)
     optimal_solution = population.evolve(generations=1000,
                                          parents_ratio=0.5,
-                                         select_method="roulette",
+                                         select_method="tournament",
                                          elite_percentage=0.2,
                                          mutate_prob=0.1,
                                          mutate_form="random",
-                                         gen_size=100,
+                                         gen_size=30,
                                          mut_inc_threshold=3)
     print("Generations fitness:", population.get_all_gen_fitness())
     print("Generations worst fitness:", population.get_all_gen_worst_fitness())
