@@ -3,7 +3,7 @@ import random
 import time
 from typing import List, Optional, Literal
 
-from city import City
+from city import City, generate_cities
 from generation import Generation
 from organism import Organism
 
@@ -13,6 +13,7 @@ class Population:
     __all_gen_worst_fitness: List[float]
     __all_gen_best_fitness: List[float]
     __current_gen: Optional["Generation"]
+    __optimal_solution: Optional["Organism"]
 
     def __init__(self, init_gen: Optional["Generation"] = None):
         self.__all_gen_fitness = list()
@@ -29,19 +30,14 @@ class Population:
     def get_all_gen_best_fitness(self) -> List[float]:
         return self.__all_gen_best_fitness
 
-    def init_first_gen(self, map_size : int = 200, chromosome_len: int = 20, gen_size: int = 20):
+    def init_first_gen(self, map_size: int = 200, chromosome_len: int = 20, gen_size: int = 20,
+                       cities: List[Optional["City"]] = None, overwrite_config: bool = False):
         if chromosome_len < 3:
             raise ValueError(f"Argument 'chromosome_len' must be an integer greater than 3 but is {chromosome_len}")
 
         organisms = list()
-        cities = list()
-
-        # create cities on map
-        for i in range(chromosome_len):
-            random.seed(str(i) + time.time().hex())
-            rand_x = random.randint(0, map_size+1)
-            rand_y = random.randint(0, map_size+1)
-            cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
+        if cities is None:
+            cities = generate_cities(length=chromosome_len, map_size=map_size, to_config=overwrite_config)
 
         # create first generation of organisms
         for i in range(gen_size):
@@ -83,4 +79,5 @@ class Population:
                 mutate_prob = min(mutate_prob * 2, 1.0)
             else:
                 mutate_prob = max(mutate_prob / 2, init_mutate_prob)
-        return min(self.__current_gen.get_organisms(), key=lambda organism: organism.calc_fitness())
+        self.__optimal_solution = min(self.__current_gen.get_organisms(), key=lambda organism: organism.calc_fitness())
+        return self.__optimal_solution

@@ -1,5 +1,6 @@
 import math
 import random
+import matplotlib.pyplot as plt
 from time import time_ns
 from typing import List, Optional, Literal
 from city import City
@@ -127,3 +128,12 @@ class Organism:
         second_child = Organism(first_chunk + self_path + last_chunk)
         second_child.mutate(form=mutate_form, probability=mutate_prob)
         return [first_child, second_child]
+
+    def draw(self) -> None:
+        x_vals = [city.get_location()[0] for city in self.__chromosome]
+        x_vals.append(x_vals[0])
+        y_vals = [city.get_location()[1] for city in self.__chromosome]
+        y_vals.append(y_vals[0])
+        plt.plot(x_vals, y_vals, linestyle="--", color="black")
+        plt.scatter(x_vals, y_vals, color="red")
+        plt.show()
