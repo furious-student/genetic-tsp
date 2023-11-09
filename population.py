@@ -1,4 +1,3 @@
-import math
 import random
 import time
 from typing import List, Optional, Literal
@@ -67,7 +66,7 @@ class Population:
             curr_best = min(self.__current_gen.get_organisms(),
                             key=lambda organism: organism.calc_fitness())
             if draw_nth > 0 and i % draw_nth == 0:
-                curr_best.draw(f"Generation {i}")
+                curr_best.display(f"Generation {i}")
             self.__all_gen_fitness.append(self.__current_gen.get_avg_fitness())
             self.__all_gen_worst_fitness.append(max(self.__current_gen.get_organisms(),
                                                     key=lambda organism: organism.calc_fitness()).calc_fitness())

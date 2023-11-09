@@ -1,5 +1,4 @@
 import re
-
 from city import City
 from utils import load_config
 from population import Population
@@ -49,7 +48,7 @@ def main():
                                          gen_size=gen_size,
                                          mut_inc_threshold=mut_inc_threshold,
                                          draw_nth=draw_nth)
-    # optimal_solution.draw()
+    # optimal_solution.display()
     print("Generations fitness:", population.get_all_gen_fitness())
     print("Generations worst fitness:", population.get_all_gen_worst_fitness())
     print("Generations best fitness:", population.get_all_gen_best_fitness())

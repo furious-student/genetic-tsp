@@ -129,7 +129,7 @@ class Organism:
         second_child.mutate(form=mutate_form, probability=mutate_prob)
         return [first_child, second_child]
 
-    def draw(self, label: str) -> None:
+    def display(self, label: str) -> None:
         x_vals = [city.get_location()[0] for city in self.__chromosome]
         x_vals.append(x_vals[0])
         y_vals = [city.get_location()[1] for city in self.__chromosome]
