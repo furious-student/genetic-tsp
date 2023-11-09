@@ -59,16 +59,19 @@ class Population:
     def evolve(self, generations: int = 10, parents_ratio: float = 0.5, elite_percentage: float = 0.2,
                select_method: Literal["tournament", "roulette"] = "tournament",
                mutate_prob: float = 0.05, mutate_form: Literal["random", "both", "swap", "inverse"] = "random",
-               gen_size: int = 30, mut_inc_threshold: int = 3) -> Optional["Organism"]:
+               gen_size: int = 30, mut_inc_threshold: int = 3, draw_nth: int = -1) -> Optional["Organism"]:
         init_mutate_prob = mutate_prob
         for i in range(generations):
             print("gen", i, "| avg_fitness:", self.__current_gen.get_avg_fitness(),
                   "| mutation probability:", mutate_prob)
+            curr_best = min(self.__current_gen.get_organisms(),
+                            key=lambda organism: organism.calc_fitness())
+            if draw_nth > 0 and i % draw_nth == 0:
+                curr_best.draw(f"Generation {i}")
             self.__all_gen_fitness.append(self.__current_gen.get_avg_fitness())
             self.__all_gen_worst_fitness.append(max(self.__current_gen.get_organisms(),
                                                     key=lambda organism: organism.calc_fitness()).calc_fitness())
-            self.__all_gen_best_fitness.append(min(self.__current_gen.get_organisms(),
-                                                   key=lambda organism: organism.calc_fitness()).calc_fitness())
+            self.__all_gen_best_fitness.append(curr_best.calc_fitness())
             self.__current_gen = self.__current_gen.create_next_gen(parents_ratio=parents_ratio,
                                                                     select_method=select_method,
                                                                     elite_percentage=elite_percentage,

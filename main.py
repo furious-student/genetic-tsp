@@ -8,7 +8,7 @@ from population import Population
 def main():
 
     # ------------------ reading config file ------------------
-    # TODO: check config for correct types and presence
+    # TODO: check config for correct types and missing values
     config = load_config()
     cities = list()
     alg_settings = config["algorithm_settings"]
@@ -31,6 +31,7 @@ def main():
     mutate_form = alg_settings["mutate_form"]
     gen_size = alg_settings["gen_size"]
     mut_inc_threshold = alg_settings["mut_inc_threshold"]
+    draw_nth = alg_settings["draw_nth"]
     # -----------------------------------------------------------
 
     population = Population()
@@ -46,8 +47,9 @@ def main():
                                          mutate_prob=mutate_prob,
                                          mutate_form=mutate_form,
                                          gen_size=gen_size,
-                                         mut_inc_threshold=mut_inc_threshold)
-    optimal_solution.draw()
+                                         mut_inc_threshold=mut_inc_threshold,
+                                         draw_nth=draw_nth)
+    # optimal_solution.draw()
     print("Generations fitness:", population.get_all_gen_fitness())
     print("Generations worst fitness:", population.get_all_gen_worst_fitness())
     print("Generations best fitness:", population.get_all_gen_best_fitness())
