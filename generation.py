@@ -107,9 +107,9 @@ class Generation:
             children += (parent1.reproduce(parent2, mutate_prob=mutate_prob, mutate_form=mutate_form))
         return children
 
-    def create_next_gen(self, parents_ratio: float = 0.5, elite_percentage: float = 0.2, mutate_prob: float = 0.05,
+    def create_next_gen(self, parents_ratio: float = 0.5, mutate_prob: float = 0.05, next_gen_size: int = 30,
                         select_method: Literal["tournament", "roulette"] = "tournament",
-                        mutate_form: Literal["random", "both", "swap", "inverse"] = "random", next_gen_size: int = 30):
+                        mutate_form: Literal["random", "both", "swap", "inverse"] = "random"):
         self.evaluate()
         self.select_parents(parents_percentage=parents_ratio, method=select_method, tournament_size_percentage=0.33)
         children = self.reproduce(mutate_prob=mutate_prob, mutate_form=mutate_form)

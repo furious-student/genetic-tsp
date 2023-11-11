@@ -73,7 +73,6 @@ class Population:
             self.__all_gen_best_fitness.append(curr_best.calc_fitness())
             self.__current_gen = self.__current_gen.create_next_gen(parents_ratio=parents_ratio,
                                                                     select_method=select_method,
-                                                                    elite_percentage=elite_percentage,
                                                                     mutate_prob=mutate_prob,
                                                                     mutate_form=mutate_form,
                                                                     next_gen_size=gen_size)
