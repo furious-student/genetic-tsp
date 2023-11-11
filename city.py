@@ -36,7 +36,8 @@ class City:
         return round(math.sqrt(pow(self.__location[0] - other_loc[0], 2) + pow(self.__location[1] - other_loc[1], 2)))
 
 
-def generate_cities(length: int = 20, map_size: int = 200, to_config: bool = False) -> List[Optional["City"]]:
+def generate_cities(length: int = 20, map_size: int = 200,
+                    to_config: bool = False, config_path: str = "./config/config.yaml") -> List[Optional["City"]]:
     cities = list()
 
     # create cities on map
@@ -47,15 +48,15 @@ def generate_cities(length: int = 20, map_size: int = 200, to_config: bool = Fal
         cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
 
     if to_config:
-        __to_config(cities)
+        __to_config(cities, path=config_path)
     return cities
 
 
-def __to_config(cities: List[Optional["City"]]):
-    config = load_config()
+def __to_config(cities: List[Optional["City"]], path: str = "./config/config.yaml"):
+    config = load_config(path=path)
     yaml_cities = dict()
-    for index,city in enumerate(cities):
+    for index, city in enumerate(cities):
         yaml_cities.update({str(index): f"{city.get_location()}"})
     config["cities"] = yaml_cities
-    write_config("config/config.yaml", config)
+    write_config(path=path, config=config)
 

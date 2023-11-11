@@ -32,19 +32,19 @@ cities:
 
 general_settings:
   map_size: 200
-  number_of_cities: 30
+  number_of_cities: 20
   overwrite_config: True
-  algorithm: both
+  algorithm: ga
 
 ga_settings:
-  generations: 500
+  generations: 300
   parents_ratio: 0.5
-  select_method: roulette
+  select_method: tournament
   mutate_prob: 0.1
   mutate_form: random
   gen_size: 30
   mut_inc_threshold: 3
-  draw_nth: 75
+  draw_nth: 50
 
 sa_settings:
   epoch_duration: 250

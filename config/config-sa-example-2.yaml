@@ -34,7 +34,7 @@ general_settings:
   map_size: 200
   number_of_cities: 30
   overwrite_config: True
-  algorithm: both
+  algorithm: sa
 
 ga_settings:
   generations: 500
@@ -47,7 +47,7 @@ ga_settings:
   draw_nth: 75
 
 sa_settings:
-  epoch_duration: 250
+  epoch_duration: 500
   init_temperature: 40
   cool_by_factor: 0.01
 

@@ -29,16 +29,12 @@ class Population:
     def get_all_gen_best_fitness(self) -> List[float]:
         return self.__all_gen_best_fitness
 
-    def init_first_gen(self, map_size: int = 200, chromosome_len: int = 20, gen_size: int = 20,
-                       cities: List[Optional["City"]] = None, overwrite_config: bool = False):
-        if chromosome_len < 3:
-            raise ValueError(f"Argument 'chromosome_len' must be an integer greater than 3 but is {chromosome_len}")
-
-        organisms = list()
+    def init_first_gen(self, gen_size: int = 20, cities: List[Optional["City"]] = None):
         if cities is None:
-            cities = generate_cities(length=chromosome_len, map_size=map_size, to_config=overwrite_config)
+            raise ValueError(f"Argument 'cities' must not be 'None' but is {cities}")
 
         # create first generation of organisms
+        organisms = list()
         for i in range(gen_size):
             random.seed(str(i) + time.time().hex())
             shuffled_cities = cities.copy()
@@ -61,8 +57,8 @@ class Population:
                gen_size: int = 30, mut_inc_threshold: int = 3, draw_nth: int = -1) -> Optional["Organism"]:
         init_mutate_prob = mutate_prob
         for i in range(generations):
-            print("gen", i, "| avg_fitness:", self.__current_gen.get_avg_fitness(),
-                  "| mutation probability:", mutate_prob)
+            # print("gen", i, "| avg_fitness:", self.__current_gen.get_avg_fitness(),
+            #       "| mutation probability:", mutate_prob)
             curr_best = min(self.__current_gen.get_organisms(),
                             key=lambda organism: organism.calc_fitness())
             if draw_nth > 0 and i % draw_nth == 0:

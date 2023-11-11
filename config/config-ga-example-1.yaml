@@ -34,7 +34,7 @@ general_settings:
   map_size: 200
   number_of_cities: 30
   overwrite_config: True
-  algorithm: both
+  algorithm: ga
 
 ga_settings:
   generations: 500
