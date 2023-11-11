@@ -1,6 +1,6 @@
 import math
 import random
-import time
+from time import time_ns
 from typing import Tuple, Optional, List
 from utils import load_config, write_config
 
@@ -38,15 +38,16 @@ class City:
 
 def generate_cities(length: int = 20, map_size: int = 200,
                     to_config: bool = False, config_path: str = "./config/config.yaml") -> List[Optional["City"]]:
-    cities = list()
+    cities = set()
 
     # create cities on map
-    for i in range(length):
-        random.seed(str(i) + time.time().hex())
+    while len(cities) < length:
+        random.seed(str(time_ns()))
         rand_x = random.randint(0, map_size + 1)
         rand_y = random.randint(0, map_size + 1)
-        cities.append(City(x=math.floor(rand_x), y=math.floor(rand_y)))
+        cities.add(City(x=math.floor(rand_x), y=math.floor(rand_y)))
 
+    cities = list(cities)
     if to_config:
         __to_config(cities, path=config_path)
     return cities

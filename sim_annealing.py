@@ -45,7 +45,8 @@ class SimAnnealing:
             curr_temperature -= cool_by_factor*init_temperature
         return self.__current_solution
 
-    def grid_search(self, epoch_durations: List[int], init_temperatures, cool_by_factors) -> Dict[str, Any]:
+    def grid_search(self, epoch_durations: List[int], init_temperatures: List[int], cool_by_factors: List[float]) \
+            -> Dict[str, Any]:
         best_result = None
         best_params = None
 
@@ -59,12 +60,12 @@ class SimAnnealing:
             if best_result is None or result.calc_fitness() < best_result.calc_fitness():
                 best_result = result
                 best_params = params
-            print(f"Done searching for params configuration: "
+            print(f"> Done searching for params configuration: "
                   f"[epoch_duration, temperature, cool_by_factor, stop_temperature] {params}")
 
-        print(f"Best Parameters: {best_params}")
-        print(f"Best Result Fitness: {best_result.calc_fitness()}")
-        print(f"Best Result: {best_result}")
+        print(f"> Best Parameters: {best_params}")
+        print(f"> Best Result Fitness: {best_result.calc_fitness()}")
+        print(f"> Best Result: {best_result}")
         return {
             "best_result": best_result,
             "best_params": best_params

@@ -43,6 +43,12 @@ def main():
     epoch_duration = sa_settings["epoch_duration"]
     init_temperature = sa_settings["init_temperature"]
     cool_by_factor = sa_settings["cool_by_factor"]
+    run_grid_search = False
+    if any(isinstance(param, list) for param in [epoch_duration, init_temperature, cool_by_factor]):
+        epoch_duration = epoch_duration if isinstance(epoch_duration, list) else [epoch_duration]
+        init_temperature = init_temperature if isinstance(init_temperature, list) else [init_temperature]
+        cool_by_factor = cool_by_factor if isinstance(cool_by_factor, list) else [cool_by_factor]
+        run_grid_search = True
 
     cities = list()
     if config.get("cities") is not None and len(config.get("cities")) > 0:
@@ -59,21 +65,23 @@ def main():
     # -----------------------------------------------------------
 
     if algorithm == "sa" or algorithm == "both":
-        print("Running Simulated Annealing Algorithm:")
         sim_annealing = SimAnnealing(init_solution=Organism(cities))
-        # result = sim_annealing.grid_search(epoch_durations=[100, 250, 500],
-        #                                    init_temperatures=[30, 40, 50],
-        #                                    cool_by_factors=[0.05, 0.025, 0.01, 0.005])
-        # optimal_solution = result.get("best_result")
-        optimal_solution = sim_annealing.run(epoch_duration=epoch_duration,
-                                             cool_by_factor=cool_by_factor,
-                                             init_temperature=init_temperature)
-        print("Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
+        if run_grid_search is True:
+            print("Running Simulated Annealing Algorithm - Grid Search:")
+            result = sim_annealing.grid_search(epoch_durations=epoch_duration,
+                                               init_temperatures=init_temperature,
+                                               cool_by_factors=cool_by_factor)
+            optimal_solution = result["best_result"]
+        else:
+            print("Running Simulated Annealing Algorithm:")
+            optimal_solution = sim_annealing.run(epoch_duration=epoch_duration,
+                                                 init_temperature=init_temperature,
+                                                 cool_by_factor=cool_by_factor)
+        print("> Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
     if algorithm == "ga" or algorithm == "both":
         print("Running Genetic Algorithm:")
         population = Population()
-        population.init_first_gen(gen_size=gen_size,
-                                  cities=cities)  # if cities are defined, overwrite_config is ignored
+        population.init_first_gen(gen_size=gen_size, cities=cities)
         optimal_solution = population.evolve(generations=generations,
                                              parents_ratio=parents_ratio,
                                              select_method=select_method,
@@ -82,10 +90,10 @@ def main():
                                              gen_size=gen_size,
                                              mut_inc_threshold=mut_inc_threshold,
                                              draw_nth=draw_nth)
-        print("Generations fitness:", population.get_all_gen_fitness())
-        print("Generations worst fitness:", population.get_all_gen_worst_fitness())
-        print("Generations best fitness:", population.get_all_gen_best_fitness())
-        print("Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
+        print("> Generations average fitness:", population.get_all_gen_fitness())
+        print("> Generations worst fitness:", population.get_all_gen_worst_fitness())
+        print("> Generations best fitness:", population.get_all_gen_best_fitness())
+        print("> Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
 
 
 def parse_args() -> str:
@@ -101,7 +109,7 @@ def parse_args() -> str:
         if file is None:
             message = "No value given to the -f/--file required argument."
         else:
-            message = "The configuration file \"" + args.file + "\" does not exist."
+            message = "The configuration file \"" + file + "\" does not exist."
         raise FileNotFoundError(message)
 
     return file
