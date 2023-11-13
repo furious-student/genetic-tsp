@@ -90,9 +90,9 @@ def main():
                                              gen_size=gen_size,
                                              mut_inc_threshold=mut_inc_threshold,
                                              draw_nth=draw_nth)
-        print("> Generations average fitness:", population.get_all_gen_fitness())
-        print("> Generations worst fitness:", population.get_all_gen_worst_fitness())
-        print("> Generations best fitness:", population.get_all_gen_best_fitness())
+        print("> Generations average fitness:", population.get_all_gen_fitness()[::20])
+        print("> Generations worst fitness:", population.get_all_gen_worst_fitness()[::20])
+        print("> Generations best fitness:", population.get_all_gen_best_fitness()[::20])
         print("> Optimal solution:", optimal_solution, "| fitness:", optimal_solution.calc_fitness())
 
 

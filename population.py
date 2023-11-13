@@ -63,7 +63,7 @@ class Population:
                             key=lambda organism: organism.calc_fitness())
             if draw_nth > 0 and i % draw_nth == 0:
                 curr_best.display(f"Generation {i}, fitness(): {curr_best.calc_fitness()}")
-                time.sleep(3)
+                # time.sleep(3)  # needed when you want to generate more than 30 images in PyCharm
             self.__all_gen_fitness.append(self.__current_gen.get_avg_fitness())
             self.__all_gen_worst_fitness.append(max(self.__current_gen.get_organisms(),
                                                     key=lambda organism: organism.calc_fitness()).calc_fitness())

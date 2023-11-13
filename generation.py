@@ -23,6 +23,16 @@ class Generation:
             fitness += organism.calc_fitness()
         return round(fitness, 2)
 
+    def get_fitness_sum(self, inverse: bool = True) -> float:
+        fitness_sum = 0
+        if inverse:
+            for organism in self.__organisms:
+                fitness_sum += 1/organism.calc_fitness()
+        else:
+            for organism in self.__organisms:
+                fitness_sum += organism.calc_fitness()
+        return fitness_sum
+
     def get_avg_fitness(self) -> float:
         return round(self.get_total_fitness() / len(self.__organisms), 2)
 
@@ -35,18 +45,6 @@ class Generation:
         if assign_to_self:
             self.__eval_organisms = eval_organisms
         return eval_organisms
-
-    def pick_elite(self, elite_percentage: float = 0.2) -> List[Optional["Organism"]]:
-        if elite_percentage < 0 or elite_percentage > 1:
-            raise ValueError(f"Argument elite_percentage can be only from interval <0, 1> but is {elite_percentage}")
-
-        elite_size = round(len(self.__organisms) * elite_percentage)
-        elite = list()
-        for organism in self.__eval_organisms:
-            if elite_size > 0:
-                elite.append(organism)
-                elite_size -= 1
-        return elite
 
     def select_parents(self, parents_percentage: float = 0.5, method: Literal["tournament", "roulette"] = "tournament",
                        tournament_size_percentage: float = 0.33):
@@ -86,7 +84,7 @@ class Generation:
         if parents_size % 2 == 1:
             parents_size += 1
         parents = set()
-        fitness_sum = 1/self.get_total_fitness()
+        fitness_sum = self.get_fitness_sum()
         sorted_organisms = sorted(self.__organisms, key=lambda o: 1/o.calc_fitness())
         while len(parents) < parents_size:
             random.seed(str(self.__organisms) + str(time_ns()))
@@ -95,6 +93,7 @@ class Generation:
             for organism in sorted_organisms:
                 if current_fitness_sum >= roulette_point:
                     parents.add(organism)
+                    break
                 current_fitness_sum += 1/organism.calc_fitness()
         self.__parents = list(parents)
 

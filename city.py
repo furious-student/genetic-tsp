@@ -33,7 +33,7 @@ class City:
         if not isinstance(other, City):
             raise TypeError("other is not an instance of the City class.")
         other_loc = other.get_location()
-        return round(math.sqrt(pow(self.__location[0] - other_loc[0], 2) + pow(self.__location[1] - other_loc[1], 2)))
+        return round(math.sqrt(pow(self.__location[0] - other_loc[0], 2) + pow(self.__location[1] - other_loc[1], 2)),2)
 
 
 def generate_cities(length: int = 20, map_size: int = 200,

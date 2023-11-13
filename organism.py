@@ -92,7 +92,7 @@ class Organism:
                 distance += city.distance(self.__chromosome[0])
                 break
             distance += city.distance(self.__chromosome[i + 1])
-        return distance
+        return round(distance, 2)
 
     def reproduce(self, other: Optional["Organism"], mutate_prob: float = 0.05,
                   mutate_form: Literal["random", "both", "swap", "inverse"] = "random") -> List[Optional["Organism"]]:
