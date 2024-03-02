@@ -64,10 +64,10 @@ general_settings:
   map_size: 200
   number_of_cities: 60
   overwrite_config: True
-  algorithm: sa
+  algorithm: ga
 
 ga_settings:
-  generations: 1000
+  generations: 2500
   parents_ratio: 0.5
   select_method: roulette
   mutate_prob: 0.1
